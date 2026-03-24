@@ -5,15 +5,9 @@ import { decodePassphrase } from '@/lib/client-utils';
 import { DebugMode } from '@/lib/Debug';
 import { KeyboardShortcuts } from '@/lib/KeyboardShortcuts';
 import { RecordingIndicator } from '@/lib/RecordingIndicator';
-import { SettingsMenu } from '@/lib/SettingsMenu';
-import { ConnectionDetails } from '@/lib/types';
-import {
-  formatChatMessageLinks,
-  LocalUserChoices,
-  PreJoin,
-  RoomContext,
-  VideoConference,
-} from '@livekit/components-react';
+import { ConnectionDetails, ParticipantRole } from '@/lib/types';
+import { ShoppingVideoConference } from '@/lib/components/ShoppingVideoConference';
+import { LocalUserChoices, PreJoin, RoomContext } from '@livekit/components-react';
 import {
   ExternalE2EEKeyProvider,
   RoomOptions,
@@ -29,10 +23,10 @@ import {
 import { useRouter } from 'next/navigation';
 import { useSetupE2EE } from '@/lib/useSetupE2EE';
 import { useLowCPUOptimizer } from '@/lib/usePerfomanceOptimiser';
+import styles from '../../../styles/Shopping.module.css';
 
 const CONN_DETAILS_ENDPOINT =
   process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT ?? '/api/connection-details';
-const SHOW_SETTINGS_MENU = process.env.NEXT_PUBLIC_SHOW_SETTINGS_MENU == 'true';
 
 export function PageClientImpl(props: {
   roomName: string;
@@ -53,30 +47,56 @@ export function PageClientImpl(props: {
   const [connectionDetails, setConnectionDetails] = React.useState<ConnectionDetails | undefined>(
     undefined,
   );
+  const [role, setRole] = React.useState<ParticipantRole>('viewer');
 
-  const handlePreJoinSubmit = React.useCallback(async (values: LocalUserChoices) => {
-    setPreJoinChoices(values);
-    const url = new URL(CONN_DETAILS_ENDPOINT, window.location.origin);
-    url.searchParams.append('roomName', props.roomName);
-    url.searchParams.append('participantName', values.username);
-    if (props.region) {
-      url.searchParams.append('region', props.region);
-    }
-    const connectionDetailsResp = await fetch(url.toString());
-    const connectionDetailsData = await connectionDetailsResp.json();
-    setConnectionDetails(connectionDetailsData);
-  }, []);
-  const handlePreJoinError = React.useCallback((e: any) => console.error(e), []);
+  const handlePreJoinSubmit = React.useCallback(
+    async (values: LocalUserChoices) => {
+      setPreJoinChoices(values);
+      const url = new URL(CONN_DETAILS_ENDPOINT, window.location.origin);
+      url.searchParams.append('roomName', props.roomName);
+      url.searchParams.append('participantName', values.username);
+      url.searchParams.append('role', role);
+      if (props.region) {
+        url.searchParams.append('region', props.region);
+      }
+      const connectionDetailsResp = await fetch(url.toString());
+      const connectionDetailsData = await connectionDetailsResp.json();
+      setConnectionDetails(connectionDetailsData);
+    },
+    [role, props.roomName, props.region],
+  );
+  const handlePreJoinError = React.useCallback((e: unknown) => console.error(e), []);
 
   return (
     <main data-lk-theme="default" style={{ height: '100%' }}>
       {connectionDetails === undefined || preJoinChoices === undefined ? (
         <div style={{ display: 'grid', placeItems: 'center', height: '100%' }}>
-          <PreJoin
-            defaults={preJoinDefaults}
-            onSubmit={handlePreJoinSubmit}
-            onError={handlePreJoinError}
-          />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            <PreJoin
+              defaults={preJoinDefaults}
+              onSubmit={handlePreJoinSubmit}
+              onError={handlePreJoinError}
+            />
+            <div className={styles.roleSelector}>
+              <span className={styles.roleSelectorLabel}>Join as</span>
+              <div className={styles.roleSelectorButtons}>
+                <button
+                  className={`lk-button ${role === 'viewer' ? styles.roleActive : ''}`}
+                  onClick={() => setRole('viewer')}
+                  aria-pressed={role === 'viewer'}
+                >
+                  👤 Viewer
+                </button>
+                <button
+                  className={`lk-button ${role === 'host' ? styles.roleActive : ''}`}
+                  onClick={() => setRole('host')}
+                  aria-pressed={role === 'host'}
+                >
+                  🎙️ Host
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       ) : (
         <VideoConferenceComponent
@@ -221,10 +241,7 @@ function VideoConferenceComponent(props: {
     <div className="lk-room-container">
       <RoomContext.Provider value={room}>
         <KeyboardShortcuts />
-        <VideoConference
-          chatMessageFormatter={formatChatMessageLinks}
-          SettingsComponent={SHOW_SETTINGS_MENU ? SettingsMenu : undefined}
-        />
+        <ShoppingVideoConference />
         <DebugMode />
         <RecordingIndicator />
       </RoomContext.Provider>

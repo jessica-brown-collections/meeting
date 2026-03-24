@@ -17,6 +17,7 @@ export async function GET(request: NextRequest) {
     const participantName = request.nextUrl.searchParams.get('participantName');
     const metadata = request.nextUrl.searchParams.get('metadata') ?? '';
     const region = request.nextUrl.searchParams.get('region');
+    const role = request.nextUrl.searchParams.get('role');
     if (!LIVEKIT_URL) {
       throw new Error('LIVEKIT_URL is not defined');
     }
@@ -37,6 +38,7 @@ export async function GET(request: NextRequest) {
     if (!randomParticipantPostfix) {
       randomParticipantPostfix = randomString(4);
     }
+    const isHost = role === 'host';
     const participantToken = await createParticipantToken(
       {
         identity: `${participantName}__${randomParticipantPostfix}`,
@@ -44,6 +46,7 @@ export async function GET(request: NextRequest) {
         metadata,
       },
       roomName,
+      isHost,
     );
 
     // Return connection details
@@ -66,7 +69,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-function createParticipantToken(userInfo: AccessTokenOptions, roomName: string) {
+function createParticipantToken(userInfo: AccessTokenOptions, roomName: string, isHost = false) {
   const at = new AccessToken(API_KEY, API_SECRET, userInfo);
   at.ttl = '5m';
   const grant: VideoGrant = {
@@ -75,6 +78,7 @@ function createParticipantToken(userInfo: AccessTokenOptions, roomName: string) 
     canPublish: true,
     canPublishData: true,
     canSubscribe: true,
+    canUpdateOwnMetadata: isHost,
   };
   at.addGrant(grant);
   return at.toJwt();
