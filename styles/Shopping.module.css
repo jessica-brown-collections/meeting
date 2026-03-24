@@ -1,0 +1,522 @@
+/* ─── Role Selector (pre-join) ──────────────────────────────────────────────── */
+.roleSelector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+}
+
+.roleSelectorLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.roleSelectorButtons {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.roleSelectorButtons > button {
+  flex: 1;
+}
+
+.roleActive {
+  background: rgba(255, 99, 82, 0.2) !important;
+  border-color: #ff6352 !important;
+  color: #ff6352 !important;
+}
+
+/* ─── Shopping room wrapper ─────────────────────────────────────────────────── */
+.shoppingRoom {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Product Overlay ───────────────────────────────────────────────────────── */
+.productOverlay {
+  position: absolute;
+  bottom: 5rem;
+  left: 1rem;
+  z-index: 20;
+  max-width: 22rem;
+  width: calc(100% - 2rem);
+  animation: slideInLeft 0.3s ease;
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-1.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.productOverlayInner {
+  position: relative;
+  background: rgba(15, 15, 15, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0.875rem;
+  backdrop-filter: blur(12px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.productImageWrap {
+  position: relative;
+  width: 100%;
+  height: 10rem;
+  overflow: hidden;
+}
+
+.productImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.productBadge {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  background: #ff6352;
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.productInfo {
+  padding: 0.875rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.productCategory {
+  margin: 0;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.productName {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.3;
+}
+
+.productDescription {
+  margin: 0;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.productPricing {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.productPrice {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.productOriginalPrice {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.35);
+  text-decoration: line-through;
+}
+
+.productDiscount {
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: rgba(255, 99, 82, 0.2);
+  color: #ff6352;
+  border: 1px solid rgba(255, 99, 82, 0.3);
+  border-radius: 0.25rem;
+  padding: 0.15rem 0.35rem;
+}
+
+.outOfStock {
+  margin: 0;
+  font-size: 0.75rem;
+  color: rgba(255, 99, 82, 0.8);
+  font-weight: 600;
+}
+
+.lowStock {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #f5a623;
+  font-weight: 600;
+}
+
+.addToCartBtn {
+  display: block;
+  margin-top: 0.6rem;
+  padding: 0.6rem 1rem;
+  background: #ff6352;
+  color: #fff;
+  border-radius: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.addToCartBtn:hover:not([aria-disabled='true']) {
+  background: #e5503e;
+  transform: translateY(-1px);
+}
+
+.addToCartBtn[aria-disabled='true'] {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.35);
+  cursor: not-allowed;
+}
+
+.overlayDismiss {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.overlayDismiss:hover {
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+}
+
+/* ─── Reaction Bar ──────────────────────────────────────────────────────────── */
+.reactionBarWrap {
+  position: absolute;
+  bottom: 5rem;
+  right: 1rem;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+
+.reactionFloats {
+  position: relative;
+  width: 3rem;
+  height: 12rem;
+  overflow: hidden;
+}
+
+.reactionFloat {
+  position: absolute;
+  bottom: 0;
+  font-size: 1.5rem;
+  animation: floatUp 3.5s ease-out forwards;
+  pointer-events: none;
+  user-select: none;
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  70% {
+    opacity: 0.8;
+    transform: translateY(-9rem) scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-12rem) scale(0.8);
+  }
+}
+
+.reactionButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  pointer-events: all;
+}
+
+.reactionBtn {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(15, 15, 15, 0.85);
+  backdrop-filter: blur(8px);
+  font-size: 1.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s ease, background 0.15s ease;
+  line-height: 1;
+}
+
+.reactionBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
+}
+
+.reactionBtn:active {
+  transform: scale(0.93);
+}
+
+/* ─── Flash Sale Banner ─────────────────────────────────────────────────────── */
+.flashSaleBanner {
+  position: absolute;
+  top: 4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, #ff6352, #ff9f1c);
+  color: #fff;
+  padding: 0.6rem 1.25rem;
+  border-radius: 2rem;
+  box-shadow: 0 4px 20px rgba(255, 99, 82, 0.5);
+  max-width: calc(100% - 2rem);
+  animation: dropIn 0.35s ease;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+@keyframes dropIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-1.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.flashSaleIcon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.flashSaleContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.flashSaleTitle {
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.flashSaleProduct {
+  font-size: 0.75rem;
+  opacity: 0.85;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.flashSaleTimer {
+  font-size: 0.8rem;
+  font-weight: 800;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.75rem;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.flashSaleDismiss {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: color 0.15s ease;
+}
+
+.flashSaleDismiss:hover {
+  color: #fff;
+}
+
+/* ─── Product Carousel (host only) ─────────────────────────────────────────── */
+.carouselContainer {
+  position: absolute;
+  bottom: 4.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 25;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  width: min(40rem, calc(100vw - 2rem));
+}
+
+.carouselToggle {
+  white-space: nowrap;
+  font-size: 0.8rem;
+  padding: 0.4rem 1rem;
+  border-radius: 2rem;
+  opacity: 0.9;
+}
+
+.carouselPanel {
+  width: 100%;
+  background: rgba(10, 10, 10, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.875rem;
+  backdrop-filter: blur(14px);
+  padding: 0.75rem;
+  max-height: 16rem;
+  overflow-y: auto;
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.4);
+  animation: slideUp 0.2s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.carouselGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  gap: 0.5rem;
+}
+
+.carouselItem {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  transition: border-color 0.15s ease;
+}
+
+.carouselItemPinned {
+  border-color: #ff6352;
+  box-shadow: 0 0 0 1px #ff6352;
+}
+
+.carouselItemImage {
+  width: 100%;
+  height: 5rem;
+  object-fit: cover;
+}
+
+.carouselItemInfo {
+  padding: 0.35rem 0.5rem 0.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  flex: 1;
+}
+
+.carouselItemName {
+  margin: 0;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.carouselItemPrice {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.carouselItemOutOfStock {
+  font-size: 0.6rem;
+  color: rgba(255, 99, 82, 0.7);
+}
+
+.carouselItemActions {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.35rem 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.carouselPinBtn,
+.carouselFlashBtn {
+  flex: 1;
+  font-size: 0.65rem !important;
+  padding: 0.25rem 0.35rem !important;
+  text-align: center;
+}
+
+.carouselPinBtn {
+  color: #ff6352 !important;
+  border-color: rgba(255, 99, 82, 0.3) !important;
+}
+
+.carouselFlashBtn {
+  color: #f5a623 !important;
+  border-color: rgba(245, 166, 35, 0.3) !important;
+}
