@@ -1,0 +1,74 @@
+[33mcommit 367a1c8049a13c4e976f5abf00aefcaf12dfda36[m[33m ([m[1;34mgrafted[m[33m, [m[1;36mHEAD[m[33m -> [m[1;32mcto/implement-shopping-overlay[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Author: cto-new[bot] <140088366+cto-new[bot]@users.noreply.github.com>
+Date:   Tue Mar 24 23:30:30 2026 +0000
+
+    Merge pull request #1 from jessica-brown-collections/cto/implement-shopping-platform
+    
+    feat: Convert LiveKit Meet into a live shopping platform
+
+ .env.example                                                     |   37 [32m++++[m
+ .eslintrc.json                                                   |    3 [32m+[m
+ .gitattributes                                                   |    1 [32m+[m
+ .github/assets/livekit-mark.png                                  |  Bin [31m0[m -> [32m832[m bytes
+ .github/assets/livekit-meet.jpg                                  |  Bin [31m0[m -> [32m102195[m bytes
+ .github/assets/template-dark.webp                                |  Bin [31m0[m -> [32m758[m bytes
+ .github/assets/template-graphic.svg                              |   31 [32m+++[m
+ .github/assets/template-light.webp                               |  Bin [31m0[m -> [32m794[m bytes
+ .github/workflows/sync-to-production.yaml                        |   16 [32m++[m
+ .github/workflows/test.yaml                                      |   32 [32m+++[m
+ .gitignore                                                       |   38 [32m++++[m
+ .prettierignore                                                  |    3 [32m+[m
+ .prettierrc                                                      |    7 [32m+[m
+ LICENSE                                                          |  202 [32m++++++++++++++++++[m
+ README.md                                                        |   42 [32m++++[m
+ app/api/connection-details/route.ts                              |   93 [32m+++++++++[m
+ app/api/record/start/route.ts                                    |   70 [32m+++++++[m
+ app/api/record/stop/route.ts                                     |   39 [32m++++[m
+ app/custom/VideoConferenceClientImpl.tsx                         |   98 [32m+++++++++[m
+ app/custom/page.tsx                                              |   34 [32m++++[m
+ app/layout.tsx                                                   |   60 [32m++++++[m
+ app/page.tsx                                                     |  201 [32m++++++++++++++++++[m
+ app/rooms/[roomName]/PageClientImpl.tsx                          |  250 [32m+++++++++++++++++++++++[m
+ app/rooms/[roomName]/page.tsx                                    |   33 [32m+++[m
+ lib/CameraSettings.tsx                                           |  177 [32m++++++++++++++++[m
+ lib/Debug.tsx                                                    |  251 [32m+++++++++++++++++++++++[m
+ lib/KeyboardShortcuts.tsx                                        |   31 [32m+++[m
+ lib/MicrophoneSettings.tsx                                       |   55 [32m+++++[m
+ lib/RecordingIndicator.tsx                                       |   40 [32m++++[m
+ lib/SettingsMenu.tsx                                             |  154 [32m++++++++++++++[m
+ lib/client-utils.ts                                              |   29 [32m+++[m
+ lib/components/FlashSaleBanner.tsx                               |   48 [32m+++++[m
+ lib/components/ProductCarousel.tsx                               |   83 [32m++++++++[m
+ lib/components/ProductOverlay.tsx                                |   66 [32m++++++[m
+ lib/components/ReactionBar.tsx                                   |   42 [32m++++[m
+ lib/components/ShoppingVideoConference.tsx                       |   79 [32m++++++++[m
+ lib/getLiveKitURL.test.ts                                        |   35 [32m++++[m
+ lib/getLiveKitURL.ts                                             |   12 [32m++[m
+ lib/hooks/useFlashSale.ts                                        |   76 [32m+++++++[m
+ lib/hooks/useHost.ts                                             |   14 [32m++[m
+ lib/hooks/useReactions.ts                                        |   87 [32m++++++++[m
+ lib/hooks/useShoppingState.ts                                    |   67 [32m++++++[m
+ lib/shopping/products.ts                                         |   86 [32m++++++++[m
+ lib/shopping/types.ts                                            |   49 [32m+++++[m
+ lib/types.ts                                                     |   30 [32m+++[m
+ lib/usePerfomanceOptimiser.ts                                    |   71 [32m+++++++[m
+ lib/useSetupE2EE.ts                                              |   15 [32m++[m
+ next-env.d.ts                                                    |    5 [32m+[m
+ next.config.js                                                   |   37 [32m++++[m
+ package.json                                                     |   44 [32m++++[m
+ pnpm-lock.yaml                                                   | 4785 [32m++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++[m
+ public/background-images/ali-kazal-tbw_KQE3Cbg-unsplash.jpg      |    3 [32m+[m
+ public/background-images/samantha-gades-BlIhVfXbi9s-unsplash.jpg |    3 [32m+[m
+ public/favicon.ico                                               |  Bin [31m0[m -> [32m15406[m bytes
+ public/images/livekit-apple-touch.png                            |  Bin [31m0[m -> [32m323[m bytes
+ public/images/livekit-meet-home.svg                              |    1 [32m+[m
+ public/images/livekit-meet-open-graph.png                        |  Bin [31m0[m -> [32m22701[m bytes
+ public/images/livekit-safari-pinned-tab.svg                      |    1 [32m+[m
+ renovate.json                                                    |   17 [32m++[m
+ styles/Debug.module.css                                          |   16 [32m++[m
+ styles/Home.module.css                                           |   40 [32m++++[m
+ styles/SettingsMenu.module.css                                   |   17 [32m++[m
+ styles/Shopping.module.css                                       |  522 [32m+++++++++++++++++++++++++++++++++++++++++++++++[m
+ styles/globals.css                                               |   67 [32m++++++[m
+ tsconfig.json                                                    |   29 [32m+++[m
+ 65 files changed, 8474 insertions(+)
